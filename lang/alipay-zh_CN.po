@@ -1,0 +1,240 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Alipay For Woocommerce v1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-09-10 01:58:08+0000\n"
+"Last-Translator: admin <e.solagirl@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: PEOPLE'S REPUBLIC OF CHINA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: class-alipay.php:80
+#@ alipay
+msgid "Enable/Disable"
+msgstr "启用/禁用"
+
+#: class-alipay.php:82
+#@ alipay
+msgid "Enable Alipay Payment"
+msgstr "启用支付宝"
+
+#: class-alipay.php:86
+#@ alipay
+msgid "Title"
+msgstr "标题"
+
+#: class-alipay.php:88
+#@ alipay
+msgid "This controls the title which the user sees during checkout."
+msgstr "该标题将在用户结账时显示"
+
+#: class-alipay.php:89
+#: class-alipay.php:170
+#@ alipay
+msgid "Alipay"
+msgstr "支付宝"
+
+#: class-alipay.php:97
+#@ alipay
+msgid "Alipay Payment Gateway Type"
+msgstr "支付宝支付接口"
+
+#: class-alipay.php:99
+#@ alipay
+msgid "Choose a payment method"
+msgstr "请选择一种支付接口"
+
+#: class-alipay.php:113
+#@ alipay
+msgid "Security Key"
+msgstr "交易安全校验码"
+
+#: class-alipay.php:119
+#@ alipay
+msgid "Alipay Account"
+msgstr "支付宝账户"
+
+#: class-alipay.php:121
+#@ alipay
+msgid "Please enter your Alipay Email; this is needed in order to take payment."
+msgstr "请输入您的与支付宝账号关联的电子邮箱（Email），付款时需要"
+
+#: class-alipay.php:125
+#@ alipay
+msgid "Submission method"
+msgstr "数据提交方式"
+
+#: class-alipay.php:127
+#@ alipay
+msgid "Use form submission method."
+msgstr "使用表单提交数据（POST方式）"
+
+#: class-alipay.php:128
+#@ alipay
+msgid "Enable this to post order data to Alipay via a form instead of using a redirect/querystring."
+msgstr "选择此项，则支付宝使用表单提交的方式发送数据，否则使用URL重定向方式发送数据。"
+
+#: class-alipay.php:150
+#@ alipay
+msgid "Debug Log"
+msgstr "调试信息"
+
+#: class-alipay.php:152
+#@ alipay
+msgid "Enable logging"
+msgstr "启用调试信息记录"
+
+#: class-alipay.php:154
+#@ alipay
+msgid "Log Alipay events, such as trade status, inside <code>woocommerce/logs/alipay.txt</code>"
+msgstr "记录支付宝事件，例如支付宝交易状态，日志文件位于<code>woocommerce/logs/alipay.txt</code>文件中"
+
+#: class-alipay.php:344
+#@ alipay
+msgid "Your Alipay Trade No.: "
+msgstr "您此次交易的支付宝交易号："
+
+#: class-alipay.php:382
+#@ alipay
+msgid "Thank you for your order. We are now redirecting you to Alipay to make payment."
+msgstr "感谢您在本网站下单。现在帮您转到支付宝完成付款。"
+
+#: class-alipay.php:404
+#@ alipay
+msgid "Pay via Alipay"
+msgstr "通过支付宝付款"
+
+#: class-alipay.php:404
+#@ alipay
+msgid "Cancel order &amp; restore cart"
+msgstr "取消订单&amp; 恢复购物车"
+
+#: class-alipay.php:444
+#@ alipay
+msgid "Thank you for your order, please click the button below to pay with Alipay."
+msgstr "感谢您在本站下单，请点击按钮到支付宝付款"
+
+#: class-alipay.php:491
+#: class-alipay.php:508
+#@ alipay
+msgid "The order is completed"
+msgstr "交易完成"
+
+#: class-alipay.php:497
+#@ alipay
+msgid "Order received, awaiting payment"
+msgstr "订单已收到，等待买家付款"
+
+#: class-alipay.php:500
+#@ alipay
+msgid "Payment received, awaiting fulfilment"
+msgstr "买家已付款，等待卖家发货"
+
+#: class-alipay.php:504
+#@ alipay
+msgid "Your order has been shipped, awaiting buyer's confirmation"
+msgstr "卖家已发货，等待买家确认收货"
+
+#: class-alipay.php:92
+#@ alipay
+msgid "Description"
+msgstr "支付方式描述"
+
+#: class-alipay.php:94
+#@ alipay
+msgid "Pay via Alipay, if you don't have an Alipay account, you can also pay with your debit card or credit card"
+msgstr "使用支付宝付款， 如果您没有支付宝账户，可以用网银付款"
+
+#: class-alipay.php:101
+#@ alipay
+msgid "Direct Payment"
+msgstr "即时到帐接口"
+
+#: class-alipay.php:102
+#@ alipay
+msgid "Escrow Payment"
+msgstr "担保买卖接口"
+
+#: class-alipay.php:103
+#@ alipay
+msgid "Dual(Direct Payment + Escrow payment)"
+msgstr "双功能接口"
+
+#. translators: plugin header field 'Name'
+#: alipay.php:0
+#@ alipay
+msgid "Alipay For Woocommerce"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#. translators: plugin header field 'AuthorURI'
+#: alipay.php:0
+#@ alipay
+msgid "http://www.codingpet.com"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: alipay.php:0
+#@ alipay
+msgid "1.0"
+msgstr ""
+
+#: class-alipay.php:132
+#@ alipay
+msgid "Method availability"
+msgstr "该支付方式适用于"
+
+#: class-alipay.php:137
+#@ alipay
+msgid "All allowed countries"
+msgstr "该网店支持的所有国家"
+
+#: class-alipay.php:138
+#: class-alipay.php:142
+#@ alipay
+msgid "Specific Countries"
+msgstr "指定国家"
+
+#. translators: plugin header field 'Description'
+#: alipay.php:0
+#@ alipay
+msgid "Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of the most widely used payment method in China."
+msgstr "为Woocommerce插件添加支付宝网关，支付宝是中国应用最广泛的支付方式之一。"
+
+#. translators: plugin header field 'Author'
+#: alipay.php:0
+#@ alipay
+msgid "CodingPet"
+msgstr ""
+
+#: class-alipay.php:107
+#@ alipay
+msgid "Partner ID"
+msgstr "合作者身份ID"
+
+#: class-alipay.php:109
+#@ alipay
+msgid "Please enter the partner ID<br />If you don't have one, <a href=\"https://b.alipay.com/newIndex.htm\" target=\"_blank\">click here</a> to get."
+msgstr "请输入合作者身份ID<br />如果您还没有合作者身份ID，请点击<a href=\"https://b.alipay.com/newIndex.htm\" target=\"_blank\">这里</a>获取"
+
+#: class-alipay.php:115
+#@ alipay
+msgid "Please enter the security key<br />If you don't have one, <a href=\"https://b.alipay.com/newIndex.htm\" target=\"_blank\">click here</a> to get."
+msgstr "请输入交易安全校验码<br />如果您还没有交易安全校验码，请点击<a href=\"https://b.alipay.com/newIndex.htm\" target=\"_blank\">这里</a>获取"
+
+#: class-alipay.php:171
+#@ alipay
+msgid "Alipay is one of the most widely used payment method in China, customer can pay with or without an alipay account"
+msgstr "支付宝是中国使用最广泛的支付方式之一，用户有或没有支付宝账户都可以完成付款"
+
