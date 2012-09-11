@@ -14,7 +14,7 @@ Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of 
 
 Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of the most widely used payment method in China.
 
-Requirement: You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">Woocommerce</a> plugin installed in order to use this plugin.
+Requirement: You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin installed in order to use this plugin.
 
 Features:
 
@@ -28,7 +28,7 @@ Features:
 
 1. Make sure you already have Woocommerce installed and activated.
 2. Upload the folder alipay-for-woocommerce to the `/wp-content/plugins/` directory
-3. Activate the plugin named <strong>Alipay For Woocommerce</strong> through the 'Plugins' menu in WordPress
+3. Activate the plugin named <strong>Alipay For WooCommerce</strong> through the 'Plugins' menu in WordPress
 4. Setup your alipay account throuth <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong>.
 
 == Frequently Asked Questions ==
