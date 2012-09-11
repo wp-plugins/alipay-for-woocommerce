@@ -28,7 +28,7 @@ Features:
 
 1. Make sure you already have Woocommerce installed and activated.
 2. Upload the folder alipay-for-woocommerce to the `/wp-content/plugins/` directory
-3. Activate the plugin named <strong>Alipay For Woocommerce</strong> through the 'Plugins' menu in WordPress
+3. Activate the plugin named <strong>Alipay For WooCommerce</strong> through the 'Plugins' menu in WordPress
 4. Setup your alipay account throuth <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong>.
 
 == Frequently Asked Questions ==
