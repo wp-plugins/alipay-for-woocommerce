@@ -1,5 +1,5 @@
 ﻿=== Plugin Name ===
-Contributors: CodingPet
+Contributors: codingpet
 Donate link:
 Tags: woocommerce, alipay
 Requires at least: 3.3
