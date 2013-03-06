@@ -45,3 +45,7 @@ Partner ID and Security Key are provided by alipay once you successfully registe
 1. Alipay settings page in English
 2. Alipay settings page in Chinese
 3. Pay with alipay.
+
+== Changelog ==
+= 1.1 =
+* Support WooCommerce 2.0
