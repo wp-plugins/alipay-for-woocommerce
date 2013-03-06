@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Alipay Payment Gateway
  *
@@ -12,7 +14,7 @@ function alipay_gateway_init() {
  	load_plugin_textdomain( 'alipay', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/'  ); 
 
 	class WC_Alipay extends WC_Payment_Gateway {
-	
+                var $notify_url;
 	   /**
 		 * Constructor for the gateway.
 		 *
@@ -33,27 +35,27 @@ function alipay_gateway_init() {
 			$this->init_settings();
 		 
 			// Define user set variables
-			$this->title                    = $this->settings['title'];
-			$this->description              = $this->settings['description'];
-			$this->alipay_account           = $this->settings['alipay_account'];
-			$this->partnerID                = $this->settings['partnerID'];
-			$this->secure_key               = $this->settings['secure_key'];
-			$this->payment_method           = $this->settings['payment_method']; 
-			$this->debug                    = $this->settings['debug'];
-			$this->form_submission_method = ( isset( $this->settings['form_submission_method'] ) && $this->settings['form_submission_method'] == 'yes' ) ? true : false;
-			$this->availability		= $this->settings['availability'];
-			$this->countries		= $this->settings['countries'];
+			$this->title                    = $this->get_option( 'title' );
+			$this->description              = $this->get_option( 'description' );
+			$this->alipay_account           = $this->get_option( 'alipay_account' );
+			$this->partnerID                = $this->get_option( 'partnerID' );
+			$this->secure_key               = $this->get_option( 'secure_key' );
+			$this->payment_method           = $this->get_option( 'payment_method' ); 
+			$this->debug                    = $this->get_option( 'debug' );
+			$this->form_submission_method   = $this->get_option( 'form_submission_method' ) == 'yes' ? true : false;
+			$this->availability		= $this->get_option( 'availability' );
+			$this->countries		= $this->get_option( 'countries' );
 			
-			$this->secure_key 		= $this->settings['secure_key'];	
+			$this->secure_key 		= $this->get_option( 'secure_key' );	
 			
-			$this->notify_url 		= trailingslashit(home_url()); 
+			$this->notify_url 		= str_replace( 'https:', 'http:', add_query_arg( 'wc-api', 'WC_Alipay', home_url( '/' ) ) );//trailingslashit(home_url()); 
 			
 			//Log
 			if ($this->debug=='yes') $this->log = $woocommerce->logger();
 			
 			// Actions
-			add_action( 'init', array(&$this, 'check_alipay_response') );
-			add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
+			add_action( 'woocommerce_api_wc_alipay', array(&$this, 'check_alipay_response') );
+			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action('woocommerce_thankyou_alipay', array(&$this, 'thankyou_page'));
 			add_action('woocommerce_receipt_alipay', array(&$this, 'receipt_page'));
 			
@@ -222,20 +224,20 @@ function alipay_gateway_init() {
 			$total_fee = $order->order_total;
 			
 			$alipay_args = array(
-				"service"			=> $service,
+				"service"		=> $service,
 				"payment_type"		=> "1",
 				
-				"partner"			=> trim($this->partnerID),
+				"partner"		=> trim($this->partnerID),
 				"_input_charset"	=> 'utf-8',
 				"seller_email"		=> trim($this->alipay_account),
 				"return_url"		=> $this->get_return_url( $order ),
 				"notify_url"		=> $this->notify_url,
 				
 				"out_trade_no"		=> $order->order_key.'|'.$order->id,
-				"subject"			=> $buyer_name,
-				"body"				=> $order->customer_note,
-				"price"				=> $total_fee,
-				"quantity"			=> 1
+				"subject"		=> $buyer_name,
+				"body"			=> $order->customer_note,
+				"price"			=> $total_fee,
+				"quantity"		=> 1
 			);
 			
 			if( $this->payment_method != 'direct' ) {
@@ -247,13 +249,14 @@ function alipay_gateway_init() {
 					"receive_name"		=> $buyer_name,
 					"receive_address"	=> $order->billing_address_1,
 					"receive_zip"		=> $order->shipping_postcode,
-					//"receive_phone"		=> $order->billing_phone,
+					//"receive_phone"	=> $order->billing_phone,
 					"receive_mobile"	=> $order->billing_phone
 				);
 				$alipay_args = array_merge($alipay_args, $add_args);
 			}
 		
 			$alipay_args = apply_filters( 'woocommerce_alipay_args', $alipay_args );
+
 			return $alipay_args;
 		}
 		
@@ -453,10 +456,10 @@ function alipay_gateway_init() {
 		 */
 		function check_alipay_response() {
 			global $woocommerce;
-					
+			@ob_clean();
 			if ( isset($_POST['seller_id']) && $_POST['seller_id'] == $this->partnerID ){
 				if ($this->debug=='yes') $this->log->add( 'alipay','Received notification from Alipay, the order number is: '.$_POST['out_trade_no']);
-				@ob_clean();	
+					
 				//Get order id
 				$out_trade_no	= $_POST['out_trade_no'];
 				$array =  explode('|', $out_trade_no);
@@ -464,7 +467,7 @@ function alipay_gateway_init() {
 				if( !$order_id || !is_numeric($order_id ) ) wp_die("Invalid Order ID");
 				
 				//Get alipay config
-				$order = &new WC_Order( $order_id );
+				$order = new WC_Order( $order_id );
 				$alipay_config = $this->get_alipay_config( $order );
 				
 				//Verify alipay's notification
@@ -484,8 +487,8 @@ function alipay_gateway_init() {
 					
 					if($this->payment_method == 'direct') {
 						 if($_POST['trade_status'] == 'TRADE_FINISHED' || $_POST['trade_status'] == 'TRADE_SUCCESS') {
-						 	$order->payment_complete();
-							$order->add_order_note( __('The order is completed', 'alipay') );	
+                                                        $order->add_order_note( __('The order is completed', 'alipay') );
+						 	$order->payment_complete();								
 							$this->successful_request( $_POST);
 						 } 
 					
@@ -500,7 +503,7 @@ function alipay_gateway_init() {
 						} else if($_POST['trade_status'] == 'WAIT_BUYER_CONFIRM_GOODS') {
 							$order->add_order_note( __('Your order has been shipped, awaiting buyer\'s confirmation', 'alipay') );	
 							$this->successful_request( $_POST);
-						} else if($_POST['trade_status'] == 'TRADE_FINISHED') {					
+						} else if($_POST['trade_status'] == 'TRADE_FINISHED') {				
 							$order->payment_complete();
 							$order->add_order_note( __('The order is completed', 'alipay') );	
 							$this->successful_request( $_POST);
@@ -514,7 +517,9 @@ function alipay_gateway_init() {
 					wp_die("fail");
 				}
 			
-			}
+			} else {
+                            wp_die( "Alipay Notification Request Failure" );
+                        }
 		}	
 		
 		
