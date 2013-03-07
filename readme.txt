@@ -4,7 +4,7 @@ Donate link:
 Tags: woocommerce, alipay
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,3 +45,7 @@ Partner ID and Security Key are provided by alipay once you successfully registe
 1. Alipay settings page in English
 2. Alipay settings page in Chinese
 3. Pay with alipay.
+
+== Changelog ==
+= 1.1 =
+* Support WooCommerce 2.0

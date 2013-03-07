@@ -9,8 +9,9 @@
  * @version		1.0
  */
 function alipay_gateway_init() {
+	if( !class_exists('WC_Payment_Gateway') ) return;
  	load_plugin_textdomain( 'alipay', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/'  ); 
-
+	
 	class WC_Alipay extends WC_Payment_Gateway {
 	
 	   /**

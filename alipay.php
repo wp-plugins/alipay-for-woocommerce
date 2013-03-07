@@ -3,7 +3,7 @@
  * Plugin Name: Alipay For WooCommerce
  * Plugin URI: http://www.codingpet.com
  * Description: Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of the most widely used payment method in China.
- * Version: 1.1
+ * Version: 1.1.1
  * Author: CodingPet
  * Author URI: http://www.codingpet.com
  * Requires at least: 3.3
