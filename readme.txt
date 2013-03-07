@@ -49,3 +49,7 @@ Partner ID and Security Key are provided by alipay once you successfully registe
 == Changelog ==
 = 1.1 =
 * Support WooCommerce 2.0
+
+= 1.1.1 =
+* Fix a bug that happens when disabling WooCommerce plugin.
+* Make sure it supports WooCommerce that belows version 2.0
