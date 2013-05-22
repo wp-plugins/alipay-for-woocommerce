@@ -22,7 +22,7 @@ Features:
 
 1. Support three payment methods of Alipay: Direct Payment,Escrow Payment and both.
 2. [New] Allow to set an exchange rate if the main currency is not Chinese Yuan.
-3. Method availability support, <del>select in which countries this method is available</del> Instead the price will be automatically converted to RMB by setting an exchange rate.
+3. Method availability support, country selection is removed because the price will be automatically converted to RMB by setting an exchange rate.
 4. Support debug log.
 5. Form submission method includes posting via a form or using a redirect/querystring.
 6. Support English and Chinese languages.
