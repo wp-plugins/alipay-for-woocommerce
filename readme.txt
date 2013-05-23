@@ -44,10 +44,10 @@ Partner ID and Security Key are provided by alipay once you successfully registe
 
 <strong>What do I need in order to receive money with Alipay?</strong>
 
-If you live in China or have an agent in China, please visit the link below to see a full detailed instruction.
+If you live in China or have an agent in China, please visit the link below to see a full detailed instruction.<br />
 http://help.alipay.com/lab/help_detail.htm?help_id=1503
 
-If not, please check the link below and see if you are qualified to have an alipay account.
+If not, please check the link below and see if you are qualified to have an alipay account.<br />
 http://help.alipay.com/lab/help_detail.htm?help_id=214379
 
 One of the most basic requirement is that you have a bank account in Chinese mainland.
