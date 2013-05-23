@@ -22,7 +22,7 @@ Features:
 
 1. Support three payment methods of Alipay: Direct Payment,Escrow Payment and both.
 2. [New] Allow to set an exchange rate if the main currency is not Chinese Yuan.
-3. Method availability support, country selection is removed because the price will be automatically converted to RMB by setting an exchange rate.
+3. Method availability support, <del>select in which countries this method is available</del> Instead the price will be automatically converted to RMB by setting an exchange rate.
 4. Support debug log.
 5. Form submission method includes posting via a form or using a redirect/querystring.
 6. Support English and Chinese languages.
@@ -46,6 +46,14 @@ Alipay doesn't show up, why?
 
 If the main currency of your store is not Chinese Yuan, please make sure you set the exchange rate through <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong> page .
 
+I got an ILLEGAL_PARTNER_EXTERFACE error when placing order.
+
+Please check the "Alipay Payment Gateway Type" option, if you are using the Direct Payment method and your Alipay account is not a business version, this error occurs. For personal account, it is recommended to use the Escrow Payment method.
+
+I got an illegal_Sign error when placing order.
+
+Please check the "Use form submission method" box and see if it solves your problem. If not, please leave us a message at our website.
+
 == Screenshots ==
 
 1. Alipay settings page in English
@@ -54,8 +62,13 @@ If the main currency of your store is not Chinese Yuan, please make sure you set
 
 == Changelog ==
 = 1.1 =
-* Support WooCommerce 2.0
+* [Added] Support WooCommerce 2.0
 
 = 1.1.1 =
-* Fix a bug that happens when disabling WooCommerce plugin.
-* Make sure it supports WooCommerce that belows version 2.0
+* [Fixed] Fix a bug that happens when disabling WooCommerce plugin.
+* [Fixed] Make sure it supports WooCommerce that belows version 2.0
+
+= 1.2 =
+* [Added] When store currency is not RMB, allow entering an exchange rate to convert price on the checkout page to RMB when paying with Alipay.
+* [Added] Support WPML + WooCommerce Multilingual plugins
+* [Revised] Change the default payment method to Escrow Payment.

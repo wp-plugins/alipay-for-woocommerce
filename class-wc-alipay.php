@@ -153,7 +153,7 @@ class WC_Alipay extends WC_Payment_Gateway {
      */
     function requirement_checks() {
         if ($this->current_currency != 'RMB' && !$this->exchange_rate) {
-            echo '<div class="error"><p>' . sprintf(__('Alipay is enabled, but the <a href="%s">store currency</a> is not set to RMB. Please set the ' . $this->current_currency . ' against the RMB exchange rate', 'alipay'), admin_url('admin.php?page=woocommerce_settings&tab=payment_gateways&section=WC_Alipay#woocommerce_alipay_exchange_rate')) . '</p></div>';
+            echo '<div class="error"><p>' . sprintf(__('Alipay is enabled, but the store currency is not set to RMB. Please <a href="%s">set the ' . $this->current_currency . ' against the RMB exchange rate</a>.', 'alipay'), admin_url('admin.php?page=woocommerce_settings&tab=payment_gateways&section=WC_Alipay#woocommerce_alipay_exchange_rate')) . '</p></div>';
         }
     }
 
