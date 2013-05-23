@@ -38,19 +38,29 @@ Features:
 
 == Frequently Asked Questions ==
 
-What is Partner ID and Security Key?
+<strong>What is Partner ID and Security Key?</strong>
 
 Partner ID and Security Key are provided by alipay once you successfully registered and signed a contract with alipay. They are a must if you want to receive payment with alipay.
 
-Alipay doesn't show up, why?
+<strong>What do I need in order to receive money with Alipay?</strong>
+
+If you live in China or have an agent in China, please visit the link below to see a full detailed instruction.
+http://help.alipay.com/lab/help_detail.htm?help_id=1503
+
+If not, please check the link below and see if you are qualified to have an alipay account.
+http://help.alipay.com/lab/help_detail.htm?help_id=214379
+
+One of the most basic requirement is that you have a bank account in Chinese mainland.
+
+<strong>Alipay doesn't show up on the checkout page, why?</strong>
 
 If the main currency of your store is not Chinese Yuan, please make sure you set the exchange rate through <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong> page .
 
-I got an ILLEGAL_PARTNER_EXTERFACE error when placing order.
+<strong>I got an ILLEGAL_PARTNER_EXTERFACE error when placing order?</strong>
 
 Please check the "Alipay Payment Gateway Type" option, if you are using the Direct Payment method and your Alipay account is not a business version, this error occurs. For personal account, it is recommended to use the Escrow Payment method.
 
-I got an illegal_Sign error when placing order.
+<strong>I got an illegal_Sign error when placing order?</strong>
 
 Please check the "Use form submission method" box and see if it solves your problem. If not, please leave us a message at our website.
 
