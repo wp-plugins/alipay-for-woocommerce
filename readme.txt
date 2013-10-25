@@ -2,8 +2,8 @@
 Contributors: codingpet
 Donate link:
 Tags: woocommerce, alipay
-Requires at least: 3.3
-Tested up to: 3.5.1
+Requires at least: 3.6.1
+Tested up to: 3.7
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ Features:
 
 1. Support three payment methods of Alipay: Direct Payment,Escrow Payment and both.
 2. [New] Allow to set an exchange rate if the main currency is not Chinese Yuan.
-3. Method availability support, country selection is removed because the price will be automatically converted to RMB by setting an exchange rate.
+3. Method availability support, <del>select in which countries this method is available</del> Instead the price will be automatically converted to RMB by setting an exchange rate.
 4. Support debug log.
 5. Form submission method includes posting via a form or using a redirect/querystring.
 6. Support English and Chinese languages.
@@ -38,13 +38,35 @@ Features:
 
 == Frequently Asked Questions ==
 
-What is Partner ID and Security Key?
+<strong>What is Partner ID and Security Key?</strong>
 
 Partner ID and Security Key are provided by alipay once you successfully registered and signed a contract with alipay. They are a must if you want to receive payment with alipay.
 
-Alipay doesn't show up, why?
+<strong>What do I need in order to receive money with Alipay?</strong>
+
+If you live in China or have an agent in China, please visit the link below to see a full detailed instruction.<br />
+http://help.alipay.com/lab/help_detail.htm?help_id=1503
+
+If not, please check the link below and see if you are qualified to have an alipay account.<br />
+http://help.alipay.com/lab/help_detail.htm?help_id=214379
+
+One of the most basic requirement is that you have a bank account in Chinese mainland.
+
+<strong>Alipay doesn't show up on the checkout page, why?</strong>
 
 If the main currency of your store is not Chinese Yuan, please make sure you set the exchange rate through <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong> page .
+
+<strong>I got an ILLEGAL_PARTNER error when placing order?</strong>
+
+Please make sure your account is registered at www.alipay.com, this plugin doesn't support account from global.alipay.com.
+
+<strong>I got an ILLEGAL_PARTNER_EXTERFACE error when placing order?</strong>
+
+Please check the "Alipay Payment Gateway Type" option, if you are using the Direct Payment method and your Alipay account is not a business version, this error occurs. For personal account, it is recommended to use the Escrow Payment method.
+
+<strong>I got an illegal_Sign error when placing order?</strong>
+
+Please check the "Use form submission method" box and see if it solves your problem. If not, please leave us a message at our website.
 
 == Screenshots ==
 
@@ -54,8 +76,13 @@ If the main currency of your store is not Chinese Yuan, please make sure you set
 
 == Changelog ==
 = 1.1 =
-* Support WooCommerce 2.0
+* [Added] Support WooCommerce 2.0
 
 = 1.1.1 =
-* Fix a bug that happens when disabling WooCommerce plugin.
-* Make sure it supports WooCommerce that belows version 2.0
+* [Fixed] Fix a bug that happens when disabling WooCommerce plugin.
+* [Fixed] Make sure it supports WooCommerce that belows version 2.0
+
+= 1.2 =
+* [Added] When store currency is not RMB, allow entering an exchange rate to convert price on the checkout page to RMB when paying with Alipay.
+* [Added] Support WPML + WooCommerce Multilingual plugins
+* [Revised] Change the default payment method to Escrow Payment.
