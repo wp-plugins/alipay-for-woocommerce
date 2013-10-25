@@ -2,7 +2,7 @@
 Contributors: codingpet
 Donate link:
 Tags: woocommerce, alipay
-Requires at least: 3.6.1
+Requires at least: 3.5.1
 Tested up to: 3.7
 Stable tag: 1.2
 License: GPLv2 or later
