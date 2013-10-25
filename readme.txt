@@ -2,8 +2,8 @@
 Contributors: codingpet
 Donate link:
 Tags: woocommerce, alipay
-Requires at least: 3.3
-Tested up to: 3.5.1
+Requires at least: 3.6.1
+Tested up to: 3.7
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,10 @@ One of the most basic requirement is that you have a bank account in Chinese mai
 <strong>Alipay doesn't show up on the checkout page, why?</strong>
 
 If the main currency of your store is not Chinese Yuan, please make sure you set the exchange rate through <strong>Woocommerce -> Settings -> Payment Gateways -> Alipay</strong> page .
+
+<strong>I got an ILLEGAL_PARTNER error when placing order?</strong>
+
+Please make sure your account is registered at www.alipay.com, this plugin doesn't support account from global.alipay.com.
 
 <strong>I got an ILLEGAL_PARTNER_EXTERFACE error when placing order?</strong>
 
