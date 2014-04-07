@@ -72,8 +72,6 @@ class WC_Alipay extends WC_Payment_Gateway {
      * @return void
      */
     function init_form_fields() {
-        global $woocommerce;
-
         $this->form_fields = array(
             'enabled' => array(
                 'title' => __('Enable/Disable', 'alipay'),
@@ -135,11 +133,11 @@ class WC_Alipay extends WC_Payment_Gateway {
                 'description' => __('Log Alipay events, such as trade status, inside <code>woocommerce/logs/alipay.txt</code>', 'alipay'),
             )
         );
-        if ($this->current_currency != 'RMB') {
+        if (!in_array( $this->current_currency, array( 'RMB', 'CNY') )) {
             $this->form_fields['exchange_rate'] = array(
                 'title' => __('Exchange Rate', 'alipay'),
                 'type' => 'text',
-                'description' => __("Please set the $this->current_currency against RMB exchange rate ", 'alipay'),
+                'description' => sprintf(__("Please set the %s against Chinese Yuan exchange rate, eg if your currency is US Dollar, then you should enter 6.19", 'alipay'), $this->current_currency),
                 'css' => 'width:100px;'
             );
         }
@@ -152,8 +150,8 @@ class WC_Alipay extends WC_Payment_Gateway {
      * @return void
      */
     function requirement_checks() {
-        if ($this->current_currency != 'RMB' && !$this->exchange_rate) {
-            echo '<div class="error"><p>' . sprintf(__('Alipay is enabled, but the <a href="%s">store currency</a> is not set to RMB. Please set the ' . $this->current_currency . ' against the RMB exchange rate', 'alipay'), admin_url('admin.php?page=woocommerce_settings&tab=payment_gateways&section=WC_Alipay#woocommerce_alipay_exchange_rate')) . '</p></div>';
+        if (!in_array( $this->current_currency, array( 'RMB', 'CNY') ) && !$this->exchange_rate) {
+            echo '<div class="error"><p>' . sprintf(__('Alipay is enabled, but the store currency is not set to Chinese Yuan. Please <a href="%1s">set the %2s against the Chinese Yuan exchange rate</a>.', 'alipay'), admin_url('admin.php?page=wc-settings&tab=checkout&section=wc_alipay#woocommerce_alipay_exchange_rate'), $this->current_currency) . '</p></div>';
         }
     }
 
@@ -167,10 +165,10 @@ class WC_Alipay extends WC_Payment_Gateway {
         if ($this->enabled == 'no')
             return false;
         If ($this->multi_currency_enabled) {
-            if ('RMB' != get_woocommerce_currency() && !$this->exchange_rate) {
+            if ( !in_array( get_woocommerce_currency(), array( 'RMB', 'CNY') ) && !$this->exchange_rate) {
                 return false;
             }
-        } else if ($this->current_currency != 'RMB' && !$this->exchange_rate) {
+        } else if ( !in_array( $this->current_currency, array( 'RMB', 'CNY') ) && !$this->exchange_rate) {
             return false;
         }
 
@@ -197,7 +195,7 @@ class WC_Alipay extends WC_Payment_Gateway {
     public function admin_options() {
         ?>
         <h3><?php _e('Alipay', 'alipay'); ?></h3>
-        <p><?php _e('Alipay is one of the most widely used payment method in China, customer can pay with or without an alipay account', 'alipay'); ?></p>
+        <p><?php _e('Alipay is a simple, secure and fast online payment method, customer can pay via debit card, credit card or alipay balance.', 'alipay'); ?></p>
         <table class="form-table">
             <?php
             // Generate the HTML For the settings form.
@@ -215,15 +213,15 @@ class WC_Alipay extends WC_Payment_Gateway {
      * @return array
      */
     function get_alipay_args($order) {
-        global $woocommerce, $wpdb;
+        global $wpdb;
 
-        $paymethod = 'directPay';
         $order_id = $order->id;
 
         if ($this->debug == 'yes')
             $this->log->add('alipay', 'Generating payment form for order #' . $order_id . '. Notify URL: ' . $this->notify_url);
 
-        $buyer_name = $order->billing_last_name . $order->billing_first_name;
+        $subject = $order->billing_last_name . $order->billing_first_name.'|#'.$order_id;
+        if( empty($subject) ) $subject = '#'.$order_id;
         if ($this->payment_method == 'direct')
             $service = 'create_direct_pay_by_user';
         else if ($this->payment_method == 'dualfun')
@@ -235,7 +233,7 @@ class WC_Alipay extends WC_Payment_Gateway {
         //Multi-currency supported by WooCommerce Multilingual plugin
         If ($this->multi_currency_enabled && $this->exchange_rate) {
             
-            if ('RMB' != get_woocommerce_currency() && $this->current_currency != get_woocommerce_currency()) {
+            if (!in_array(get_woocommerce_currency(), array( 'RMB', 'CNY' ) ) && $this->current_currency != get_woocommerce_currency()) {
                 $sql = "SELECT (value) FROM " . $wpdb->prefix . "icl_currencies WHERE code = '" . get_woocommerce_currency() . "'";
                 $currency = $wpdb->get_results($sql, OBJECT);
 
@@ -249,7 +247,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             }
             
         } else {
-            if ($this->current_currency != 'RMB' && $this->exchange_rate) {
+            if (!in_array( $this->current_currency, array( 'RMB', 'CNY' ) ) && $this->exchange_rate) {
                 $total_fee = round($total_fee * $this->exchange_rate, 2);
             }
         }
@@ -262,8 +260,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             "return_url" => $this->get_return_url($order),
             "notify_url" => $this->notify_url,
             "out_trade_no" => $order->order_key . '|' . $order->id,
-            "subject" => $buyer_name,
-            "body" => $order->customer_note,
+            "subject" => $subject,
             "price" => $total_fee,
             "quantity" => 1
         );
@@ -272,14 +269,14 @@ class WC_Alipay extends WC_Payment_Gateway {
             $add_args = array(
                 "logistics_fee" => '0',
                 "logistics_type" => 'EXPRESS', //optional EXPRESS（快递）、POST（平邮）、EMS（EMS）
-                "logistics_payment" => 'SELLER_PAY', //optional SELLER_PAY（卖家承担运费）、BUYER_PAY（买家承担运费）
-
-                "receive_name" => $buyer_name,
-                "receive_address" => $order->billing_address_1,
-                "receive_zip" => $order->shipping_postcode,
-                //"receive_phone"	=> $order->billing_phone,
-                "receive_mobile" => $order->billing_phone
+                "logistics_payment" => 'SELLER_PAY', //optional SELLER_PAY（卖家承担运费）、BUYER_PAY（买家承担运费）               
             );
+
+            if( !empty($buyer_name) )                   $add_args['receive_name'] = $buyer_name;
+            if( !empty($order->billing_address_1) )     $add_args['receive_address'] = $order->billing_address_1;
+            if( !empty($order->shipping_postcode) )     $add_args['receive_zip'] = $order->shipping_postcode;
+            if( !empty($order->billing_phone) )         $add_args['receive_phone'] = $order->billing_phone;
+            if( !empty($order->billing_phone) )         $add_args['receive_mobile'] = $order->billing_phone;
             $alipay_args = array_merge($alipay_args, $add_args);
         }
 
@@ -481,7 +478,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             //Get alipay config
             $order = new WC_Order($order_id);
             $alipay_config = $this->get_alipay_config($order);
-
+	    unset($_POST['wc-api']);
             //Verify alipay's notification
             require_once("lib/alipay_notify.class.php");
             $alipayNotify = new AlipayNotify($alipay_config);
@@ -492,9 +489,9 @@ class WC_Alipay extends WC_Payment_Gateway {
             $verify_result = $alipayNotify->verifyNotify($log);
 
             if ($this->debug == 'yes') {
-                $verify_result = $verify_result ? 'Valid' : 'Invalid';
+                $debug_verify_result = $verify_result ? 'Valid' : 'Invalid';
                 if ($this->debug == 'yes')
-                    $this->log->add('alipay', 'Verification result: ' . $verify_result);
+                    $this->log->add('alipay', 'Verification result: ' . $debug_verify_result);
             }
 
             if ($verify_result) {

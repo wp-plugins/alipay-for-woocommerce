@@ -2,9 +2,9 @@
 Contributors: codingpet
 Donate link:
 Tags: woocommerce, alipay
-Requires at least: 3.5.1
-Tested up to: 3.7
-Stable tag: 1.2
+Requires at least: 3.7
+Tested up to: 3.8.1
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,16 +17,14 @@ Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of 
 该插件将支付宝接口集成到WooCommerce中，支持即时到帐、担保买卖和双功能三种支付方式。
 
 Requirement: You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin installed in order to use this plugin.
+<strong>This plugin is not intended for accounts of global.alipay.com</strong>
 
 Features:
 
 1. Support three payment methods of Alipay: Direct Payment,Escrow Payment and both.
-2. [New] Allow to set an exchange rate if the main currency is not Chinese Yuan.
-3. Method availability support, <del>select in which countries this method is available</del> Instead the price will be automatically converted to RMB by setting an exchange rate.
-4. Support debug log.
-5. Form submission method includes posting via a form or using a redirect/querystring.
-6. Support English and Chinese languages.
-7. [New] WPML and WooCommerce Multilingual support.
+2. Allow to set an exchange rate if the main currency is not Chinese Yuan.
+3. Form submission method includes posting via a form or using a redirect/querystring.
+4. WPML and WooCommerce Multilingual support.
 
 == Installation ==
 
@@ -86,3 +84,10 @@ Please check the "Use form submission method" box and see if it solves your prob
 * [Added] When store currency is not RMB, allow entering an exchange rate to convert price on the checkout page to RMB when paying with Alipay.
 * [Added] Support WPML + WooCommerce Multilingual plugins
 * [Revised] Change the default payment method to Escrow Payment.
+
+= 1.2.1 =
+Some bug fixes.
+* Order subject format is changed to 'buyer name|#order_id'
+* [Fixed] A issue caused by RMB & CNY
+* [Fixed] Ordre status not being updated after payment is made
+* Updated language pack
