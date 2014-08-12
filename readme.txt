@@ -67,11 +67,13 @@ Integrate the Chinese Alipay payment gateway with Woocommerce.
 == Frequently Asked Questions ==
 
 <strong>支持的产品及申请地址</strong>
+
 担保交易、即时到帐和双功能，即时到帐需要企业账号。
 产品介绍和申请地址：https://b.alipay.com/order/productSet.htm
 
 
 <strong>异步通知失败</strong>
+
 客户付款后，支付宝会向网站发送异步通知，站点接收后会更新相应订单状态。例如，担保交易时，客户付款后订单状态变为“处理中”,客户释放款项后订单状态变为“完成”。
 
 若订单状态无法更新，可能是异步通知失败，请检查服务器的访问日志，看是否有支付宝发来的请求，返回的状态码是什么。
@@ -80,6 +82,7 @@ Integrate the Chinese Alipay payment gateway with Woocommerce.
 
 
 <strong>关于自动发货</strong>
+
 若销售虚拟产品，且订单产品同时具备虚拟(virtual)和可下载(Downloadable)两种属性，则客户付款后支付宝订单状态就会变为“卖家已发货，等待买家确认”。
 
 
