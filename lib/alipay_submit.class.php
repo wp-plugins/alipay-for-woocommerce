@@ -3,21 +3,57 @@
  * 类名：AlipaySubmit
  * 功能：支付宝各接口请求提交类
  * 详细：构造支付宝各接口表单HTML文本，获取远程HTTP数据
- * 版本：3.2
- * 日期：2011-03-25
+ * 版本：3.3
+ * 日期：2012-07-23
  * 说明：
  * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
 require_once("alipay_core.function.php");
+require_once("alipay_md5.function.php");
+
 class AlipaySubmit {
+
+	var $alipay_config;
+	/**
+	 *支付宝网关地址（新）
+	 */
+	var $alipay_gateway_new = 'https://mapi.alipay.com/gateway.do?';
+
+	function __construct($alipay_config){
+		$this->alipay_config = $alipay_config;
+	}
+    function AlipaySubmit($alipay_config) {
+    	$this->__construct($alipay_config);
+    }
+	
+	/**
+	 * 生成签名结果
+	 * @param $para_sort 已排序要签名的数组
+	 * return 签名结果字符串
+	 */
+	function buildRequestMysign($para_sort) {
+		//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+		$prestr = createLinkstring($para_sort);
+		
+		$mysign = "";
+		switch (strtoupper(trim($this->alipay_config['sign_type']))) {
+			case "MD5" :
+				$mysign = md5Sign($prestr, $this->alipay_config['key']);
+				break;
+			default :
+				$mysign = "";
+		}
+		
+		return $mysign;
+	}
+
 	/**
      * 生成要请求给支付宝的参数数组
      * @param $para_temp 请求前的参数数组
-     * @param $aliapy_config 基本配置信息数组
      * @return 要请求的参数数组
      */
-	function buildRequestPara($para_temp,$aliapy_config) { 
+	function buildRequestPara($para_temp) {
 		//除去待签名参数数组中的空值和签名参数
 		$para_filter = paraFilter($para_temp);
 
@@ -25,11 +61,11 @@ class AlipaySubmit {
 		$para_sort = argSort($para_filter);
 
 		//生成签名结果
-		$mysign = buildMysign($para_sort, trim($aliapy_config['key']), strtoupper(trim($aliapy_config['sign_type'])));
-
+		$mysign = $this->buildRequestMysign($para_sort);
+		
 		//签名结果与签名方式加入请求提交参数组中
 		$para_sort['sign'] = $mysign;
-		$para_sort['sign_type'] = strtoupper(trim($aliapy_config['sign_type']));
+		$para_sort['sign_type'] = strtoupper(trim($this->alipay_config['sign_type']));
 		
 		return $para_sort;
 	}
@@ -37,32 +73,30 @@ class AlipaySubmit {
 	/**
      * 生成要请求给支付宝的参数数组
      * @param $para_temp 请求前的参数数组
-	 * @param $aliapy_config 基本配置信息数组
      * @return 要请求的参数数组字符串
      */
-	function buildRequestParaToString($para_temp,$aliapy_config) {
+	function buildRequestParaToString($para_temp) {
 		//待请求参数数组
-		$para = $this->buildRequestPara($para_temp,$aliapy_config);
+		$para = $this->buildRequestPara($para_temp);
 		
-		//把参数组中所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串，并对参数值做urlencode编码
+		//把参数组中所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串，并对字符串做urlencode编码
 		$request_data = createLinkstringUrlencode($para);
 		
 		return $request_data;
 	}
 	
     /**
-     * 构造提交表单HTML数据
+     * 建立请求，以表单HTML形式构造（默认）
      * @param $para_temp 请求参数数组
-     * @param $gateway 网关地址
      * @param $method 提交方式。两个值可选：post、get
      * @param $button_name 确认按钮显示文字
      * @return 提交表单HTML文本
      */
-	function buildForm($para_temp, $gateway, $method, $button_name, $aliapy_config) {
+	function buildRequestForm($para_temp, $method, $button_name) {
 		//待请求参数数组
-		$para = $this->buildRequestPara($para_temp,$aliapy_config);
+		$para = $this->buildRequestPara($para_temp);
 		
-		$sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$gateway."_input_charset=".trim(strtolower($aliapy_config['input_charset']))."' method='".$method."'>";
+		$sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->alipay_gateway_new."_input_charset=".trim(strtolower($this->alipay_config['input_charset']))."' method='".$method."'>";
 		while (list ($key, $val) = each ($para)) {
             $sHtml.= "<input type='hidden' name='".$key."' value='".$val."'/>";
         }
@@ -76,27 +110,56 @@ class AlipaySubmit {
 	}
 	
 	/**
-     * 构造模拟远程HTTP的POST请求，获取支付宝的返回XML处理结果
-	 * 注意：该功能PHP5环境及以上支持，因此必须服务器、本地电脑中装有支持DOMDocument、SSL的PHP配置环境。建议本地调试时使用PHP开发软件
+     * 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果
      * @param $para_temp 请求参数数组
-     * @param $gateway 网关地址
-	 * @param $aliapy_config 基本配置信息数组
-     * @return 支付宝返回XML处理结果
+     * @return 支付宝处理结果
      */
-	function sendPostInfo($para_temp, $gateway, $aliapy_config) {
-		$xml_str = '';
+	function buildRequestHttp($para_temp) {
+		$sResult = '';
 		
 		//待请求参数数组字符串
-		$request_data = $this->buildRequestParaToString($para_temp,$aliapy_config);
-		//请求的url完整链接
-		$url = $gateway . $request_data;
-		//远程获取数据
-		$xml_data = getHttpResponse($url,trim(strtolower($aliapy_config['input_charset'])));
-		//解析XML
-		$doc = new DOMDocument();
-		$doc->loadXML($xml_data);
+		$request_data = $this->buildRequestPara($para_temp);
 
-		return $doc;
+		//远程获取数据
+		$sResult = getHttpResponsePOST($this->alipay_gateway_new, $this->alipay_config['cacert'],$request_data,trim(strtolower($this->alipay_config['input_charset'])));
+
+		return $sResult;
+	}
+	
+	/**
+     * 建立请求，以模拟远程HTTP的POST请求方式构造并获取支付宝的处理结果，带文件上传功能
+     * @param $para_temp 请求参数数组
+     * @param $file_para_name 文件类型的参数名
+     * @param $file_name 文件完整绝对路径
+     * @return 支付宝返回处理结果
+     */
+	function buildRequestHttpInFile($para_temp, $file_para_name, $file_name) {
+		
+		//待请求参数数组
+		$para = $this->buildRequestPara($para_temp);
+		$para[$file_para_name] = "@".$file_name;
+		
+		//远程获取数据
+		$sResult = getHttpResponsePOST($this->alipay_gateway_new, $this->alipay_config['cacert'],$para,trim(strtolower($this->alipay_config['input_charset'])));
+
+		return $sResult;
+	}
+	
+	/**
+     * 用于防钓鱼，调用接口query_timestamp来获取时间戳的处理函数
+	 * 注意：该功能PHP5环境及以上支持，因此必须服务器、本地电脑中装有支持DOMDocument、SSL的PHP配置环境。建议本地调试时使用PHP开发软件
+     * return 时间戳字符串
+	 */
+	function query_timestamp() {
+		$url = $this->alipay_gateway_new."service=query_timestamp&partner=".trim(strtolower($this->alipay_config['partner']))."&_input_charset=".trim(strtolower($this->alipay_config['input_charset']));
+		$encrypt_key = "";		
+
+		$doc = new DOMDocument();
+		$doc->load($url);
+		$itemEncrypt_key = $doc->getElementsByTagName( "encrypt_key" );
+		$encrypt_key = $itemEncrypt_key->item(0)->nodeValue;
+		
+		return $encrypt_key;
 	}
 }
 ?>
