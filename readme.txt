@@ -14,7 +14,7 @@ Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of 
 
 Integrate the Chinese Alipay payment gateway with Woocommerce.
 
-设置页面位于： WooCommerce &raquo; 设置 &raquo; Checkout &raquo; 支付宝
+设置页面位于： WooCommerce &raquo; 设置 &raquo; 结账 &raquo; 支付宝
 
 
 <strong>功能简介</strong>
