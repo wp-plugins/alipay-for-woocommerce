@@ -14,31 +14,45 @@ Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of 
 
 Integrate the Chinese Alipay payment gateway with Woocommerce.
 
-设置页面位于： WooCommerce &raquo; 设置 &raquo; Checkout &raquo; 支付宝
+设置页面位于： WooCommerce &raquo; 设置 &raquo; 结账 &raquo; 支付宝
 
 
 <strong>功能简介</strong>
+
 1. 支持担保交易、双功能和即时到帐，即时到帐需要企业账户
+
 2. 若主货币不是人民币，可设置汇率转成人民币付款，不影响其它支付方式
+
 3. 当订单全部为虚拟可下载物品时，会自动发货
 
 
 <strong>1.3版新增功能及修改</strong>
+
 1. 虚拟可下载物品自动发货
+
 2. 订单名称可设置为: 客户姓名、订单中第一个产品的名称或客户姓名+网站名称
+
 3. 客户将支付宝中的款项释放给卖家后，订单状态自动变为“已完成”
+
 4. 网站订单号变为WooCommerce的订单ID
+
 5. 记录支付宝交易号，且在后台编辑订单页面和客户订单收据中显示
 
 
 <strong>Features:</strong>
+
 1. Support three payment methods of Alipay: Direct Payment,Escrow Payment and both.
+
 2. Allow to set an exchange rate if the main currency is not Chinese Yuan.
+
 3. Automatic delivery for products that are both vitual and downloadable.
 
 
+
 <strong>Requirement:</strong>
+
 1. You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin installed in order to use this plugin.
+
 2. You must have an account at www.alipay.com.
 
 
