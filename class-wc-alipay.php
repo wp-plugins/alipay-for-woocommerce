@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		WC_Alipay
  * @extends		WC_Payment_Gateway
- * @version		1.0
+ * @version		1.3
  */
 
 class WC_Alipay extends WC_Payment_Gateway {
@@ -33,7 +33,7 @@ class WC_Alipay extends WC_Payment_Gateway {
         $this->supported_currencies   = array( 'RMB', 'CNY' );
         $this->lib_path               = plugin_dir_path( __FILE__ ) . 'lib';
 
-        $this->charset                =  strtolower( get_bloginfo( 'charset' ) );
+        $this->charset                = strtolower( get_bloginfo( 'charset' ) );
         if( !in_array( $this->charset, array( 'gbk', 'utf-8') ) ) {
             $this->charset = 'utf-8';
         }
@@ -213,8 +213,8 @@ class WC_Alipay extends WC_Payment_Gateway {
                 'type'        => 'checkbox',
                 'label'       => __('Enable logging', 'alipay'),
                 'default'     => 'no',
-                'description' => __('Log Alipay events, such as trade status, inside <code>woocommerce/logs/alipay.txt</code>', 'alipay'),
-            )
+                'description' => sprintf(__('Log Alipay events, such as trade status, inside <code>%s</code>', 'alipay'), wc_get_log_file_path( 'alipay' )
+            ))
         );
         if (!in_array( $this->current_currency, array( 'RMB', 'CNY') )) {
 
@@ -288,8 +288,8 @@ class WC_Alipay extends WC_Payment_Gateway {
             "service"           => $service,
             "partner"           => $this->partnerID,
             "payment_type"      => "1",
-            "notify_url"        => $this->notify_url,
-            "return_url"        => $this->get_return_url( $order ),
+            "notify_url"        => urldecode( $this->notify_url ),                //Avoid double encoding
+            "return_url"        => urldecode( $this->get_return_url( $order ) ),  //Avoid double encoding
             "seller_email"      => $this->alipay_account,
             "out_trade_no"      => $order->id,
             "subject"           => $subject,

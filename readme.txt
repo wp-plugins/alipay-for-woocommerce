@@ -4,7 +4,7 @@ Donate link:
 Tags: woocommerce, alipay
 Requires at least: 3.8.1
 Tested up to: 3.9.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,3 +158,8 @@ Some bug fixes.
 * [Added] 订单状态在同步通知和异步通知时都可以更新
 * [Added] 虚拟可下载物品自动发货功能
 * [Added] 提供三个订单名称选择 
+
+= 1.3.1 =
+* [Fixed]   中文URL地址导致illegal_Sign错误
+* [Added]   插件设置链接
+* [Revised] 更新日志存储地址说明
