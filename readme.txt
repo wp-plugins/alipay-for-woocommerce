@@ -4,7 +4,7 @@ Donate link:
 Tags: woocommerce, alipay
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -163,3 +163,6 @@ Some bug fixes.
 * [Fixed]   中文URL地址导致illegal_Sign错误
 * [Added]   插件设置链接
 * [Revised] 更新日志存储地址说明
+
+= 1.3.2 =
+* [Fixed] WooCommerce 2.1版报错问题，2.2+用户可忽略次更新

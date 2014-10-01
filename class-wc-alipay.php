@@ -213,9 +213,15 @@ class WC_Alipay extends WC_Payment_Gateway {
                 'type'        => 'checkbox',
                 'label'       => __('Enable logging', 'alipay'),
                 'default'     => 'no',
-                'description' => sprintf(__('Log Alipay events, such as trade status, inside <code>%s</code>', 'alipay'), wc_get_log_file_path( 'alipay' )
-            ))
+                'description' => __('Log Alipay events, such as trade status, inside <code>woocommerce/logs/alipay.txt</code>', 'alipay')
+            )
         );
+
+        // For WC2.2+
+        if(  function_exists( 'wc_get_log_file_path' ) ){
+             $this->form_fields['debug']['description'] = sprintf(__('Log Alipay events, such as trade status, inside <code>%s</code>', 'alipay'), wc_get_log_file_path( 'alipay' ) );
+        }
+
         if (!in_array( $this->current_currency, array( 'RMB', 'CNY') )) {
 
             $this->form_fields['exchange_rate'] = array(
