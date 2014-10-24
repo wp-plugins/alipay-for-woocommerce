@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  * @class 		WC_Alipay
  * @extends		WC_Payment_Gateway
- * @version		1.3
+ * @version		1.3.3
  */
 
 class WC_Alipay extends WC_Payment_Gateway {
@@ -61,6 +61,7 @@ class WC_Alipay extends WC_Payment_Gateway {
         $this->form_submission_method = $this->get_option( 'form_submission_method' ) == 'yes' ? true : false;
         $this->order_title_format     = $this->get_option( 'order_title_format' );
         $this->exchange_rate          = $this->get_option( 'exchange_rate' );
+        $this->order_prefix           = $this->get_option( 'order_prefix' );
         
         // Logs
         if ( 'yes' == $this->debug ) {
@@ -155,12 +156,15 @@ class WC_Alipay extends WC_Payment_Gateway {
                 'title'       => __('Title', 'alipay'),
                 'type'        => 'text',
                 'description' => __('This controls the title which the user sees during checkout.', 'alipay'),
-                'default'     => __('Alipay', 'alipay')
+                'default'     => __('Alipay', 'alipay'),
+                'desc_tip'    => true,
             ),
-            'description'   => array(
-                'title'     => __('Description', 'alipay'),
-                'type'      => 'textarea',
-                'default'   => __('Pay via Alipay, if you don\'t have an Alipay account, you can also pay with your debit card or credit card', 'alipay')
+            'description' => array(
+                'title'       => __('Description', 'alipay'),
+                'type'        => 'textarea',
+                'description' => __('This controls the description which the user sees during checkout.', 'alipay'),
+                'default'     => __('Pay via Alipay, if you don\'t have an Alipay account, you can also pay with your debit card or credit card', 'alipay'),
+                'desc_tip'    => true,
             ),
             'payment_method' => array(
                 'title'       => __('Alipay Payment Gateway Type', 'alipay'),
@@ -170,7 +174,8 @@ class WC_Alipay extends WC_Payment_Gateway {
                     'escrow'  => __('Escrow Payment', 'alipay'),
                     'dualfun' => __('Dual(Direct Payment + Escrow payment)', 'alipay'),
                     'direct'  => __('Direct Payment', 'alipay')
-                )
+                ),
+                'desc_tip'    => true,
             ),
             'partnerID' => array(
                 'title'       => __('Partner ID', 'alipay'),
@@ -187,15 +192,23 @@ class WC_Alipay extends WC_Payment_Gateway {
             'alipay_account' => array(
                 'title'       => __('Alipay Account', 'alipay'),
                 'type'        => 'text',
-                'description' => __('Please enter your Alipay Email; this is needed in order to take payment.', 'alipay'),
-                'css'         => 'width:200px'
+                'description' => __('Please enter your Alipay account ( Email or Phone Number ); this is needed in order to take payment.', 'alipay'),
+                'css'         => 'width:200px',
+                'desc_tip'    => true,
+            ),
+            'order_prefix' => array(
+                'title'       => __( 'Order No. Prefix', 'alipay' ),
+                'type'        => 'text',
+                'description' => __( 'eg.WC-. If you <strong>use your Alipay account for multiple stores</strong>, Please enter this prefix and make sure it is unique as Alipay will not allow orders with the same merchant order number.', 'alipay' ),
+                'default'     => 'WC-'
             ),
             'form_submission_method' => array(
                 'title'       => __('Submission method', 'alipay'),
                 'type'        => 'checkbox',
                 'label'       => __('Use form submission method.', 'alipay'),
                 'description' => __('Enable this to post order data to Alipay via a form instead of using a redirect/querystring.', 'alipay'),
-                'default'     => 'no'
+                'default'     => 'no',
+                'desc_tip'    => true,
             ),
             'order_title_format' => array(
                 'title'       => __('Preferred format for order title', 'alipay'),
@@ -206,7 +219,8 @@ class WC_Alipay extends WC_Payment_Gateway {
                     'customer_name' => __('Customer Full Name|#Order ID', 'alipay'),
                     'product_title' => __('Name of the first Product|#Order ID', 'alipay'),
                     'shop_name'     => sprintf( __( '[Customer Full Name]\'s Order From %s|#Order ID', 'alipay' ), get_bloginfo('name') )
-                )
+                ),
+                'desc_tip'    => true,
             ),
             'debug' => array(
                 'title'       => __('Debug Log', 'alipay'),
@@ -228,7 +242,8 @@ class WC_Alipay extends WC_Payment_Gateway {
                 'title'       => __('Exchange Rate', 'alipay'),
                 'type'        => 'text',
                 'description' => sprintf(__("Please set the %s against Chinese Yuan exchange rate, eg if your currency is US Dollar, then you should enter 6.19", 'alipay'), $this->current_currency),
-                'css'         => 'width:100px;'
+                'css'         => 'width:80px;',
+                'desc_tip'    => true,
             );
         }
     }
@@ -297,7 +312,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             "notify_url"        => urldecode( $this->notify_url ),                //Avoid double encoding
             "return_url"        => urldecode( $this->get_return_url( $order ) ),  //Avoid double encoding
             "seller_email"      => $this->alipay_account,
-            "out_trade_no"      => $order->id,
+            "out_trade_no"      => $this->order_prefix . ltrim( $order->get_order_number(), '#' ),
             "subject"           => $subject,
             "price"             => $total_fee,
             "quantity"          => 1,          
@@ -395,6 +410,7 @@ class WC_Alipay extends WC_Payment_Gateway {
 
             $aliapy_config  = $this->get_alipay_config();
             $alipayNotify   = new AlipayNotify( $aliapy_config );
+            $order_key      = $_GET['key'];
 
             unset( $_GET['order'] );
             unset( $_GET['key'] );
@@ -407,12 +423,27 @@ class WC_Alipay extends WC_Payment_Gateway {
 
             if ( $verify_result ) {
 
-                $trade_no = $_GET['trade_no'];
+                $trade_no      = $_GET['trade_no'];         // Alipay Order Number
+                $out_trade_no  = $_GET['out_trade_no'];      // Merchant Order Number
 
                 // Check order ID
-                if( $order_id != $_GET['out_trade_no'] ){
-                    echo "<p><strong>EROR:</strong>The order ID doesn't match!</p>";
-                    return;
+                if( is_numeric( $out_trade_no ) ){
+                    if( !empty( $this->order_prefix ) ){
+                        $check  = (int) str_replace( $this->order_prefix, '', $out_trade_no );
+                    } else {
+                        $check  = (int) $out_trade_no;
+                    }
+                } else {
+                    $check = (int) str_replace( $this->order_prefix, '', $out_trade_no );
+                }
+
+                if( $order_id != $check ){
+                    // We have an invalid $order_id, probably because order_prefix has changed
+                    $check  = wc_get_order_id_by_order_key( $order_key );
+                    if( $order_id != $check ){
+                        _e( "<p><strong>ERROR:</strong>The order ID doesn't match!</p>", 'alipay' );
+                        return;
+                    }
                 }
 
                 // Order ID is correct.
@@ -592,10 +623,19 @@ class WC_Alipay extends WC_Payment_Gateway {
 
             // Get order id
             $out_trade_no   = $_POST['out_trade_no'];
-            $order_id       = $out_trade_no;
+
+            if( is_numeric( $out_trade_no ) ){
+                if( !empty( $this->order_prefix ) ){
+                    $order_id  = (int) str_replace( $this->order_prefix, '', $out_trade_no );
+                } else {
+                    $order_id  = (int) $out_trade_no;
+                }
+            } else {
+                $order_id = (int) str_replace( $this->order_prefix, '', $out_trade_no );
+            }
 
             if ( !$order_id || !is_numeric( $order_id ) ){
-                 wp_die("Invalid Order ID");
+                 wp_die( 'Invalid Order ID' );
             }
 
             // Get alipay config
@@ -620,7 +660,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             }
 
             if( !$verify_result ){
-                wp_die("fail");
+                wp_die( 'Fail' );
             }
             
             // Avoid duplicate order comments
@@ -643,8 +683,8 @@ class WC_Alipay extends WC_Payment_Gateway {
                 }
 
             } else {
-                // Escrow and Dual Payment 
 
+                // Escrow and Dual Payment 
                 switch( $_POST['trade_status'] ){
 
                     case 'WAIT_BUYER_PAY' :
@@ -658,7 +698,7 @@ class WC_Alipay extends WC_Payment_Gateway {
 
                     case 'WAIT_SELLER_SEND_GOODS' :
 
-                        /************** Check order status before updating*/
+                        // Check order status before updating
                         $order_needs_updating = ( in_array( $order->status, array('processing', 'completed') ) ) ? false : true;
                         if( $order_needs_updating ){
                             $status = apply_filters( 'woocommerce_alipay_payment_successful_status', 'processing', $order);                            
@@ -700,7 +740,7 @@ class WC_Alipay extends WC_Payment_Gateway {
 
         } else {
 
-            wp_die("Alipay Notification Request Failure");
+            wp_die( 'Alipay Notification Request Failure' );
         }
     }
 
@@ -722,7 +762,6 @@ class WC_Alipay extends WC_Payment_Gateway {
         }
 
         // Decide if goodes need to be send automatically
-
         if( !in_array( $order->status, array( 'pending', 'failed', 'on-hold') ) ){
 
             $send_goods = false;
@@ -767,7 +806,8 @@ class WC_Alipay extends WC_Payment_Gateway {
             );
 
         } else {
-            // Add shipping parameter
+            // Develop function of sending non-digital goods from WordPress backend
+            // Currently this part is not used.
         }
 
         $alipay_config = $this->get_alipay_config();
@@ -791,7 +831,7 @@ class WC_Alipay extends WC_Payment_Gateway {
             }       
             
         } else {
-            return 'error: Request Failed';
+            return 'Error: Request Failed';
         }
         
     }
