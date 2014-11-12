@@ -3,10 +3,10 @@
  * Plugin Name: Alipay For WooCommerce
  * Plugin URI: http://www.codingpet.com
  * Description: Integrate the Chinese Alipay payment gateway with Woocommerce. Alipay is one of the most widely used payment method in China.
- * Version: 1.3.3
+ * Version: 1.3.4
  * Author: CodingPet
  * Author URI: http://www.codingpet.com
- * Requires at least: 3.8
+ * Requires at least: 3.9
  * Tested up to: 4.0
  *
  * Text Domain: alipay
@@ -45,14 +45,22 @@ function woocommerce_alipay_add_gateway( $methods ) {
 
 /**
  * Display Alipay Trade No. for customer
+ * 
+ *
+ * The function is put here because the alipay class 
+ * is not called on order-received page
+ *
+ * @param array $total_rows
+ * @param mixed $order
+ * @return array
  */
 function wc_alipay_display_order_meta_for_customer( $total_rows, $order ){
-    $my_custom_field_1 = get_post_meta( $order->id, 'Alipay Trade No.', true );
-    $new_total_rows = array();
-    if( !empty($my_custom_field_1) ){
+    $trade_no = get_post_meta( $order->id, 'Alipay Trade No.', true );
+    
+    if( !empty( $trade_no ) ){
         $new_row['alipay_trade_no'] = array(
             'label' => __( 'Alipay Trade No.:', 'alipay' ),
-            'value' => $my_custom_field_1
+            'value' => $trade_no
         );
         // Insert $new_row after shipping field
         $total_rows = array_merge( array_splice( $total_rows,0,2), $new_row, $total_rows );

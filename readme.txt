@@ -4,7 +4,7 @@ Donate link:
 Tags: woocommerce, alipay
 Requires at least: 3.8
 Tested up to: 4.0
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,3 +151,9 @@ Some bug fixes.
 * [Fixed] 增加商户订单号前缀功能，需到后台设置，防止一个支付宝账户用于多个网站时出现重复订单号，产生“TRADE_DATA_MATCH_ERROR”错误
 * 更新一些翻译
 * 隐藏不重要的说明
+
+= 1.3.4 = 
+* [Fixed]   修复使用双功能接口的即使到账付款方式时订单状态无法更新的bug
+* [Fixed]   修复使用默认固定链接格式时验证失败的问题
+* [Revised] 用户付款即减库存，之前为订单完成后减少库存
+* [Revised] 删除“订单完成”的订单备注，使用系统默认的订单状态备注即可
