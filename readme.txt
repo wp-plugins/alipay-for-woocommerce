@@ -27,7 +27,7 @@ Integrate Alipay with WooCommerce. To use this payment gateway, you need to sign
 
 = 使用条件 = 
 
-* 必须安装<a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a>插件
+* 必须安装<a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a>（2.2.0及以上版本）插件
 * 服务器必须支持cURL
 * 拥有支付宝商家账户并成功开通所需服务
 
@@ -39,7 +39,7 @@ Integrate Alipay with WooCommerce. To use this payment gateway, you need to sign
 
 = Requirement: =
 
-* You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a> plugin installed in order to use this plugin.
+* You must have <a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a>(Version 2.2.0 and above) plugin installed.
 * cURL must be enabled for your server.
 * You must have an account at www.alipay.com.
 
